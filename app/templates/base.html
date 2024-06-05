@@ -26,21 +26,18 @@
                 <a class="nav-link active inicio-link" aria-current="page" href="/">Inicio</a>
                 
               </li>
-              {% if user.is_authenticated %}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Producto
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="/cargarAgregarProducto">Agregar productos</a></li>
+                  <li><a class="dropdown-item" href="">Agregar productos</a></li>
               </li>
-              {% else %}
-              {% endif %}
               </div>
             <form id="carrito" class="d-flex justify-content-between"> 
               {% csrf_token %}
             </div>            
-                <a href="/carrito" class="ms-auto">
+                <a href="" class="ms-auto">
                   <img src="{% static 'img/bag.svg' %}" alt="" style="height: 20px;">
               </a>              
             </form>

@@ -12,6 +12,5 @@ from django. contrib import messages
 
 # Create your views here.
 def cargarInicio(request):
-    productos = Producto.objects.all()
-    return render(request,"index.html",{"productos":productos})
+    return render(request,"index.html")
 
