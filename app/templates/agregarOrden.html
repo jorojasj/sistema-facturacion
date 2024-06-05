@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Nueva Orden de Compra {% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h1>Nueva Orden de Compra</h1>
+</div>
+
+<div class="container">
+    {% load crispy_forms_tags %}
+    <form id="formAgregarProducto" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button type="submit">Guardar</button>
+        <a class="btn btn-primary" href="{% url 'ordenCompra' %}">Generar Orden</a>
+    </form>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

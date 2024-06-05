@@ -3,12 +3,6 @@
 {% block title %} Inicio {% endblock %}
 
 {% block content %}
-
-<div class="container">
-    <td><a class="btn btn-primary" href="{% url 'ordenCompra' %}">Descargar</a></td>
-
-</div>
-
 <div class="container mt-5 mb-5">
   <table class="table table-striped table-bordered">
       <thead class="thead-dark">
@@ -23,12 +17,12 @@
       <tbody>
           {% for o in ordenes %}
           <tr>
-              <th scope="row">{{forloop.counter}}</th>
-              <td>{{o.cliente}}</td>
+              <th scope="row">{{o.numero_compra}}</th>
+              <td>{{o.nombre_cliente}}</td>
               <td>{{o.fecha}}</td>
-              <td>{{o.importe}}</td>
+              <td>{{o.precio_producto}}</td>
               <td><a class="btn btn-primary" href="{% url 'ordenCompra' %}">Descargar</a></td>
-          </tr>
+            </tr>
           {% endfor %}
       </tbody>
   </table>
