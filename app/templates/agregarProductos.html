@@ -44,21 +44,15 @@
                 <label for="cmbCategoria">Categoria:</label>
                 <select name="cmbCategoria" id="cmbCategoria" class="form-select">
                     <option value="null" disabled selected>Seleccione...</option>
-                    {% for c in categoriasTodas %}
-                    <option value="{{c.id_categoria}}">{{c.nombre_categoria}}</option>
-                    {% endfor %}
                 </select>
             </div>
             <div class="col">
                 <label for="cmbMarca">Marca:</label>
                 <select name="cmbMarca" id="cmbMarca" class="form-select">
                     <option value="null" disabled selected>Seleccione...</option>
-                    {% for m in marcasTodas %}
-                    <option value="{{m.id_marca}}">{{m.nombre_marca}}</option>
-                    {% endfor %}
                 </select>
             </div>
-            <button onclick="validar()" class="btn btn-success mt-5">Agregar Producto</button>
+            <button class="btn btn-success mt-5">Agregar Producto</button>
         </div>
     </form>
 </div>
@@ -67,5 +61,4 @@
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'js/function.js' %}"></script>
 {% endblock %}
