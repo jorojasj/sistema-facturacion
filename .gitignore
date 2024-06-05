@@ -1,0 +1,26 @@
+#Ignorar archivos de configuración local
+*.pyc
+*.pyo
+*.pyd
+pycache/
+
+#Ignorar el archivo de configuración de entorno local
+.env
+
+#Ignorar archivos generados por el sistema de control de versiones de Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+
+#Ignorar el directorio donde se almacenan los archivos estáticos coleccionados
+/static/
+
+#Ignorar el directorio donde se almacenan los archivos de medios cargados por el usuario
+/media/
+
+#Ignorar archivos de base de datos SQLite
+*miDB.sqlite3
+
+#Ignorar el directorio de dependencias de Python
+/env/

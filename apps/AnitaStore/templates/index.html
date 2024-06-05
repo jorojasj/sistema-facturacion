@@ -1,0 +1,40 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %} Inicio {% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+  <table class="table">
+      <thead>
+          <tr>
+              <th scope="col">N Factura</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Importe</th>
+              <th scope="col">Descargar Factura</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for p in productos %}
+          <tr>
+              <th scope="row">{{forloop.counter}}</th>
+              <td>
+                  <img src="{{p.imagen.url}}" alt="">
+              </td>
+              <td>{{p.nombre}}</td>
+              <td>{{p.stock}}</td>
+              <td>{{p.precio}}</td>
+              <td>                  
+                  <a href="cargarEditarProducto/{{p.id_producto}}" class="btn btn-primary">Editar</a>
+                  <a href="eliminarProducto/{{p.id_producto}}" class="btn btn-danger">Eliminar</a>
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+</div>
+{% endblock %}
+{% block js %}
+
+{% endblock %}
