@@ -77,8 +77,8 @@ def ordenCompra(request):
 
         p.drawString(30, height - 85, "4275 Isleta Blvd SW ")
         p.drawString(30, height - 100, "Albuquerque, Nuevo Mexico, 87105")
-        p.drawString(30, height - 115, "Estados Unidos")
-        p.drawString(76, height - 130, "555-5678")
+        p.drawString(30, height - 115, "Chile")
+        p.drawString(76, height - 130, "+56 9 8166 7610")
 
     
 
