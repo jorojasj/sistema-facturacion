@@ -21,7 +21,7 @@
               <td>{{o.nombre_cliente}}</td>
               <td>{{o.fecha}}</td>
               <td>{{o.precio_producto}}</td>
-              <td><a class="btn btn-primary" href="{% url 'ordenCompra' %}">Descargar</a></td>
+              <td><a class="btn btn-primary" href="{% url 'orden_compra' id_orden_compra=o.numero_compra%}">Descargar</a></td>
             </tr>
           {% endfor %}
       </tbody>

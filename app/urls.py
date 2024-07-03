@@ -7,4 +7,5 @@ urlpatterns = [
     path('index/', views.index, name="index"),
     path('agregarOrden/', views.cargarAgregarOrden, name="agregarOrden"),
     path('ordenCompra/', views.ordenCompra, name="ordenCompra"),
+    path('ordenCompra/<int:id_orden_compra>/', views.ordenCompra, name='orden_compra'),
 ]
