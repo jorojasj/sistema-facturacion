@@ -8,4 +8,5 @@ urlpatterns = [
     path('agregarOrden/', views.cargarAgregarOrden, name="agregarOrden"),
     path('ordenCompra/', views.ordenCompra, name="ordenCompra"),
     path('ordenCompra/<int:id_orden_compra>/', views.ordenCompra, name='orden_compra'),
+    path('editar_orden/<int:id_orden>/', views.editar_orden, name='editar_orden'),
 ]
