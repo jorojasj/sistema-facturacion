@@ -5,8 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from .models import *
 from .forms import *
 from django.shortcuts import get_object_or_404
-from .forms import OrdenCompraForm
-from .models import OrdenCompra 
+from django.http import JsonResponse
+from django.contrib import messages
 
 #IMPORTS DEL PDF
 from django.http import HttpResponse
@@ -111,13 +111,51 @@ def editar_orden(request, id_orden):
     if request.method == 'POST':
         form = OrdenCompraForm(request.POST, instance=orden)
         if form.is_valid():
-            form.save()
+            orden = form.save(commit=False)
             orden.estado = 'rectificada'  # Cambia el estado a rectificada
             orden.save()
+            messages.success(request, 'Orden rectificada con éxito.')
             return redirect('index')  # Redirige al índice
     else:
         form = OrdenCompraForm(instance=orden)
     return render(request, 'editar_orden.html', {'form': form})
+
+def enviar_motivo_rechazo(request):
+    if request.method == 'POST':
+        orden_id = request.POST.get('orden_id')
+        motivo_key = f'motivo-{orden_id}'
+        motivo = request.POST.get(motivo_key, '').strip()  # Asegura un valor por defecto para evitar AttributeError
+
+        print(f"orden_id: {orden_id}, motivo: {motivo}")  # Debugging
+
+        if motivo and orden_id:
+            try:
+                entrega = get_object_or_404(Entrega, numero_compra=orden_id)
+                nuevo_motivo = MotivoRechazo(entrega=entrega, motivo=motivo)
+                nuevo_motivo.save()
+                return JsonResponse({'status': 'success'})
+            except Exception as e:
+                print(f"Error: {e}")  # Mejor debugging
+                return JsonResponse({'status': 'error', 'message': f'Error al procesar el motivo del rechazo: {e}'}, status=400)
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Motivo del rechazo o ID de entrega vacío'}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+def rechazar_entrega(request, entrega_id):
+    entrega = get_object_or_404(Entrega, id=entrega_id)
+    if request.method == 'POST':
+        form = MotivoRechazoForm(request.POST)
+        if form.is_valid():
+            motivo_rechazo = form.save(commit=False)
+            motivo_rechazo.entrega = entrega
+            motivo_rechazo.save()
+            messages.success(request, 'Entrega rechazada con éxito.')
+            return redirect('alguna_vista')
+        else:
+            messages.error(request, 'Error en el formulario de rechazo.')
+    else:
+        form = MotivoRechazoForm()
+    return render(request, 'base.html', {'form': form})
 
 
 def ordenCompra(request, id_orden_compra):

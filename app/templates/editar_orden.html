@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4">
     <div class="row">
-        <!-- Columna del Formulario -->
+        
         <div class="col-md-6">
             <form method="post" class="card p-3">
                 {% csrf_token %}
@@ -13,10 +13,10 @@
                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
             </form>
         </div>
-        <!-- Columna de la Imagen -->
+        
         <div class="col-md-6">
             {% load static %}
-            <!-- Añadir un margen a la izquierda de la imagen -->
+            
             <img src="{% static 'img/logo.png' %}" class="img-fluid" style="margin-left: 180px;" alt="Descripción de la imagen">
             
         </div>
