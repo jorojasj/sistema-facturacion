@@ -16,23 +16,41 @@ Muchas empresas todavía dependen de métodos manuales o sistemas desactualizado
 
 ### Instalación
 
-1. Clona el repositorio
+1. Abre una terminal o CMD:
+
+   Inicia una terminal en tu sistema operativo. Puedes usar Terminal en macOS/Linux o CMD/Powershell en Windows.
+
+2. Clona el repositorio
 
    ```sh
    git clone https://github.com/jorojasj/sistema-facturacion.git
    ```
 
-2. Instala los requerimientos
+3. Navega a la carpeta del proyecto:
+   ```sh
+   cd sistema-facturación
+   ```
+
+4. Instala los requerimientos
 
    ```sh
    pip install -r requirements.txt
    ```
 
-3. Ejecuta el proyecto
+5. Ejecuta el servidor de desarrollo
 
    ```sh
    python manage.py runserver
    ```
+6. Accede a la aplicación:
+   Abre tu navegador de preferencia y visita http://127.0.0.1:8000 para ver la aplicación en funcionamiento.
+
+## Uso
+    - Accede a la aplicación en tu navegador web en http://127.0.0.1:8000
+    - Inicia sesión con las credenciales Usuario: admin, Contraseña: admin .
+    - Navega a la sección de órdenes de compra.
+    - Completa el formulario para crear una nueva orden de compra.
+    - Guarda y revisa tus órdenes de compra en la sección correspondiente.
 
 ## Tecnologias Utilizadas
 
@@ -41,3 +59,10 @@ Muchas empresas todavía dependen de métodos manuales o sistemas desactualizado
     -Bootstrap: Para estilos
 
     -SQLite: Base de Datos
+
+## Contribución
+    -Haz un fork del proyecto.
+    -Crea una nueva rama (git checkout -b nombre-rama).
+    -Realiza tus cambios y haz commits (git commit -m 'Añadir nueva funcionalidad').
+    -Sube tu rama (git push origin nombre-rama).
+    -Abre un Pull Request.
