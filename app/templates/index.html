@@ -24,11 +24,17 @@
               <td>{{o.precio_producto}}</td>
               <td>
                 {{o.get_estado_display}}
-                <select name="" id="">
-                    <option value="">Por Entregar</option>
-                    <option value="">Entregada</option>
-                    <option value="">Rechazada</option>
+                <select name="estado-{{o.numero_compra}}" id="estado-select-{{o.numero_compra}}">
+                    <option value="por_entregar">Por Entregar</option>
+                    <option value="entregada">Entregada</option>
+                    <option value="rechazada">Rechazada</option>
                 </select>
+                <!-- Formulario para el motivo de rechazo -->
+                <form id="motivo-rechazo-form-{{o.numero_compra}}" style="display: none;">
+                    <input type="text" name="motivo-{{o.numero_compra}}" placeholder="Motivo del rechazo">
+                    <input type="hidden" name="orden_id" value="{{o.numero_compra}}">
+                    <button type="submit">Enviar</button>
+                </form>
               </td>
               <td><a class="btn btn-primary" href="{% url 'orden_compra' id_orden_compra=o.numero_compra%}">Descargar</a>
                 <a class="btn btn-secondary" href="{% url 'editar_orden' id_orden=o.numero_compra %}">Editar</a>
@@ -38,7 +44,71 @@
       </tbody>
   </table>
 </div>
-{% endblock %}
-{% block js %}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      {% for o in ordenes %}
+      document.getElementById('estado-select-{{o.numero_compra}}').addEventListener('change', function() {
+          var motivoRechazoForm = document.getElementById('motivo-rechazo-form-{{o.numero_compra}}');
+          if (this.value === 'rechazada') {
+              motivoRechazoForm.style.display = 'block';
+          } else {
+              motivoRechazoForm.style.display = 'none';
+          }
+      });
+
+      $('#motivo-rechazo-form-{{o.numero_compra}}').submit(function(e) {
+          e.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+          var formData = $(this).serialize(); // Serializa los datos del formulario
+
+          $.ajax({
+              type: "POST",
+              url: "{% url 'enviar_motivo_rechazo' %}", // Asegúrate de tener esta URL en tus urls.py
+              data: formData,
+              success: function(response) {
+                  // Actualiza el historial de rechazos
+                  $('#historial-rechazos').append('<p>Rechazado el ' + response.fecha + ': ' + response.motivo + '</p>');
+                  // Oculta el formulario de motivo de rechazo
+                  $('#motivo-rechazo-form-{{o.numero_compra}}').hide();
+              },
+              error: function(response) {
+                  // Maneja el error
+                  alert('Error al enviar el motivo de rechazo.');
+              }
+          });
+      });
+
+  function enviarMotivoRechazo() {
+    $.ajax({
+        url: '/ruta/a/enviar_motivo_rechazo/',
+        type: 'POST',
+        data: {
+            // Datos a enviar
+        },
+        success: function(response) {
+            if(response.status === 'success') {
+                alert('Motivo de rechazo enviado correctamente.');
+            } else {
+                alert('Error al enviar el motivo del rechazo: ' + response.message);
+            }
+        },
+        error: function() {
+            alert('Error al enviar el motivo del rechazo. Por favor, intente de nuevo.');
+        }
+    });
+}
+
+      {% endfor %}
+  });
+</script>
+
+<div class="container mt-4">
+  <h3>Historial de Rechazos</h3>
+  <div id="historial-rechazos">
+      {% for motivo in entrega.motivos_rechazo.all %}
+          <p>Rechazado el {{ motivo.fecha }}: {{ motivo.motivo }}</p>
+      {% endfor %}
+  </div>
+</div>
 {% endblock %}

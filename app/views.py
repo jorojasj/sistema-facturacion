@@ -83,7 +83,60 @@ def exportar_pdf(request, orden_id):
     return response
 
 
+def mi_vista(request):
+    if request.method == 'POST':
+        form = MotivoRechazoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('nombre_de_la_url_a_redirigir')
+    else:
+        form = MotivoRechazoForm()
+    
+    return render(request, 'index.html', {'form': form})
 
+def enviar_motivo_rechazo(request):
+    if request.method == 'POST':
+        # Aquí procesas la solicitud
+        try:
+            # Lógica para procesar el motivo del rechazo
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+
+
+
+def rechazar_entrega(request, entrega_id):
+    entrega = Entrega.objects.get(id=entrega_id)
+    if request.method == 'POST':
+        form = MotivoRechazoForm(request.POST)
+        if form.is_valid():
+            motivo_rechazo = form.save(commit=False)
+            motivo_rechazo.entrega = entrega
+            motivo_rechazo.save()
+            # Redirige o maneja la lógica después del rechazo
+            return redirect('alguna_vista')
+        else:
+            print(form.errors)  # Imprime los errores del formulario en la consola
+    else:
+        form = MotivoRechazoForm()
+    return render(request, 'tu_template.html', {'form': form})
+
+
+def rechazar_entrega(request, entrega_id):
+    entrega = Entrega.objects.get(id=entrega_id)
+    if request.method == 'POST':
+        form = MotivoRechazoForm(request.POST)
+        if form.is_valid():
+            motivo_rechazo = form.save(commit=False)
+            motivo_rechazo.entrega = entrega
+            motivo_rechazo.save()
+            # Redirige o maneja la lógica después del rechazo
+            return redirect('alguna_vista')
+    else:
+        form = MotivoRechazoForm()
+    return render(request, 'tu_template_rechazo.html', {'form': form})
 
 
 def descargar_factura(request, id_orden_compra):
