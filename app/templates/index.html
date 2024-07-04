@@ -11,8 +11,8 @@
               <th scope="col">Cliente</th>
               <th scope="col">Fecha</th>
               <th scope="col">Importe</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Descargar Orden</th>
+              <th scope="col">Estados</th>
+              <th scope="col">Exportar</th>
           </tr>
       </thead>
       <tbody>
@@ -22,10 +22,17 @@
               <td>{{o.nombre_cliente}}</td>
               <td>{{o.fecha}}</td>
               <td>{{o.precio_producto}}</td>
-              <td>{{o.get_estado_display}}</td>
+              <td>
+                {{o.get_estado_display}}
+                <select name="" id="">
+                    <option value="">Por Entregar</option>
+                    <option value="">Entregada</option>
+                    <option value="">Rechazada</option>
+                </select>
+              </td>
               <td><a class="btn btn-primary" href="{% url 'orden_compra' id_orden_compra=o.numero_compra%}">Descargar</a>
                 <a class="btn btn-secondary" href="{% url 'editar_orden' id_orden=o.numero_compra %}">Editar</a>
-            </td>
+               </td>
             </tr>
           {% endfor %}
       </tbody>
