@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import *
 from .forms import *
 from django.shortcuts import get_object_or_404
+from .forms import OrdenCompraForm
 from .models import OrdenCompra 
 
 #IMPORTS DEL PDF
@@ -103,6 +104,21 @@ def descargar_factura(request, id_orden_compra):
     response['Content-Disposition'] = f'attachment; filename="factura_{id_orden_compra}.pdf"'
     
     return response
+
+
+def editar_orden(request, id_orden):
+    orden = get_object_or_404(OrdenCompra, pk=id_orden)
+    if request.method == 'POST':
+        form = OrdenCompraForm(request.POST, instance=orden)
+        if form.is_valid():
+            form.save()
+            orden.estado = 'rectificada'  # Cambia el estado a rectificada
+            orden.save()
+            return redirect('index')  # Redirige al índice
+    else:
+        form = OrdenCompraForm(instance=orden)
+    return render(request, 'editar_orden.html', {'form': form})
+
 
 def ordenCompra(request, id_orden_compra):
     # Obtener la orden de compra específica por ID

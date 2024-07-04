@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class OrdenCompra(models.Model):
     nombre_cliente = models.CharField(max_length=100)
     compania = models.CharField(max_length=100)
@@ -14,9 +12,13 @@ class OrdenCompra(models.Model):
     nombre_producto = models.CharField(max_length=100)
     precio_producto = models.IntegerField()
     cantidad = models.IntegerField()
+    # Nuevo campo estado
+    ESTADOS = (
+        ('creada', 'Creada'),
+        ('rectificada', 'Rectificada'),
+    )
+    estado = models.CharField(max_length=11, choices=ESTADOS, default='creada')
 
     def __str__(self):
         txt = "Codigo: {0} - Nombre Cliente: {1} - Compañia: {2}"
         return txt.format(self.numero_compra, self.nombre_cliente, self.compania)
-
-
