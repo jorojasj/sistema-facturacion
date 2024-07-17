@@ -2,3 +2,20 @@ img{
     width: 70px;
     height: 50px;
 }
+
+
+.amarillo {
+    background-color: yellow;
+}
+
+.naranjo {
+    background-color: orange;
+}
+
+.verde {
+    background-color: green;
+}
+
+.otro-color {
+    background-color: gray; /* O cualquier otro color por defecto */
+}

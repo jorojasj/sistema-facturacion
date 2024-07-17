@@ -1,7 +1,6 @@
 {% extends './base.html' %}
 {% load static %}
 {% block title %} Inicio {% endblock %}
-
 {% block content %}
 <div class="container mt-5 mb-5">
   <table class="table table-striped table-bordered">
@@ -17,27 +16,31 @@
       </thead>
       <tbody>
           {% for o in ordenes %}
-          <tr>
-              <th scope="row">{{o.numero_compra}}</th>
-              <td>{{o.nombre_cliente}}</td>
-              <td>{{o.fecha}}</td>
-              <td>{{o.precio_producto}}</td>
-              <td>
-                {{o.get_estado_display}}
-                <select name="estado-{{o.numero_compra}}" id="estado-select-{{o.numero_compra}}">
-                    <option value="por_entregar">Por Entregar</option>
-                    <option value="entregada">Entregada</option>
-                    <option value="rechazada">Rechazada</option>
-                </select>
-                <!-- Formulario para el motivo de rechazo -->
-                <form id="motivo-rechazo-form-{{o.numero_compra}}" style="display: none;">
-                    <input type="text" name="motivo-{{o.numero_compra}}" placeholder="Motivo del rechazo">
-                    <input type="hidden" name="orden_id" value="{{o.numero_compra}}">
-                    <button type="submit">Enviar</button>
-                </form>
-              </td>
-              <td><a class="btn btn-primary" href="{% url 'orden_compra' id_orden_compra=o.numero_compra%}">Descargar</a>
+          <tr class="{{ o.color_estado }}"> <!-- Corregido: Aplica la clase directamente aquí -->
+            <th scope="row">{{o.numero_compra}}</th>
+            <td>{{o.nombre_cliente}}</td>
+            <td>{{o.fecha}}</td>
+            <td>{{o.precio_producto}}</td>
+            
+            <td>
+              {{o.get_estado_display}}
+              <select name="estado-{{o.numero_compra}}" id="estado-select-{{o.numero_compra}}" onchange="cambiarColorBoton('{{o.numero_compra}}')">
+                <option value="por_entregar">Por Entregar</option>
+                <option value="entregada">Entregada</option>
+                <option value="rechazada">Rechazada</option>
+              </select>
+              
+              <!-- Formulario para el motivo de rechazo -->
+              <form id="motivo-rechazo-form-{{o.numero_compra}}" style="display: none;">
+                  <input type="text" name="motivo-{{o.numero_compra}}" placeholder="Motivo del rechazo">
+                  <input type="hidden" name="orden_id" value="{{o.numero_compra}}">
+                  <button type="submit">Enviar</button>
+              </form>
+            </td>
+            <td>
+                <a class="btn btn-primary" href="{% url 'orden_compra' id_orden_compra=o.numero_compra%}">Descargar</a>
                 <a class="btn btn-secondary" href="{% url 'editar_orden' id_orden=o.numero_compra %}">Editar</a>
+                <a class="btn btn-danger" href="{% url 'anular_orden' id_orden=o.numero_compra %}">Anular</a>
                </td>
             </tr>
           {% endfor %}
@@ -46,6 +49,44 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function cambiarColorBoton(numeroCompra) {
+      var select = document.getElementById("estado-select-" + numeroCompra);
+      var valorSeleccionado = select.value;
+      var tr = select.closest('tr'); // Encuentra el elemento <tr> ancestro más cercano
+    
+      // Remueve todas las clases de color previas del <tr>
+      tr.classList.remove("por_entregar", "entregada", "rechazada", "otro-color");
+    
+      // Añade la clase basada en el valor seleccionado
+      switch (valorSeleccionado) {
+        case "por_entregar":
+          tr.classList.add("por_entregar");
+          break;
+        case "entregada":
+          tr.classList.add("entregada");
+          break;
+        case "rechazada":
+          tr.classList.add("rechazada");
+          // Muestra el formulario de motivo de rechazo si se selecciona 'rechazada'
+          document.getElementById("motivo-rechazo-form-" + numeroCompra).style.display = 'block';
+          break;
+        default:
+          tr.classList.add("otro-color");
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      var selects = document.querySelectorAll('[id^="estado-select-"]');
+      selects.forEach(function(select) {
+        select.addEventListener('change', function() {
+          var numeroCompra = this.id.replace("estado-select-", "");
+          cambiarColorBoton(numeroCompra);
+        });
+      });
+    });
+    </script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
       {% for o in ordenes %}
@@ -78,6 +119,8 @@
               }
           });
       });
+
+
 
   function enviarMotivoRechazo() {
     $.ajax({

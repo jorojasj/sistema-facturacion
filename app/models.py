@@ -16,12 +16,23 @@ class OrdenCompra(models.Model):
     ESTADOS = (
         ('creada', 'Creada'),
         ('rectificada', 'Rectificada'),
+        ('entregada', 'Entregada'),
     )
     estado = models.CharField(max_length=11, choices=ESTADOS, default='creada')
 
     def __str__(self):
         txt = "Codigo: {0} - Nombre Cliente: {1} - Compañia: {2}"
         return txt.format(self.numero_compra, self.nombre_cliente, self.compania)
+
+    def color_estado(self):
+        if self.estado == 'creada':
+            return 'amarillo'
+        elif self.estado == 'rectificada':
+            return 'naranjo'
+        elif self.estado == 'entregada':
+            return 'verde'
+        else:
+            return 'otro-color'
 
 
 
@@ -46,3 +57,4 @@ class MotivoRechazo(models.Model):
 
     def __str__(self):
         return f"Rechazado el {self.fecha.strftime('%Y-%m-%d %H:%M')}: {self.motivo}"
+

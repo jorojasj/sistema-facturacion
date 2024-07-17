@@ -8,3 +8,31 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-bottom: 20px;
   }
+
+  .amarillo {
+    background-color: yellow;
+}
+
+.naranjo {
+    background-color: orange;
+}
+
+.verde {
+    background-color: green;
+}
+
+.otro-color {
+    background-color: gray; /* O cualquier otro color por defecto */
+    
+}
+.por_entregar {
+  background-color: rgb(85, 85, 2);
+}
+
+.entregada {
+  background-color: green;
+}
+
+.rechazada {
+  background-color: red;
+}

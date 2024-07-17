@@ -8,12 +8,19 @@ from django.shortcuts import get_object_or_404
 from .forms import OrdenCompraForm
 from .models import OrdenCompra 
 
+
 #IMPORTS DEL PDF
 from django.http import HttpResponse
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from PyPDF2 import PdfReader, PdfWriter
+from reportlab.pdfgen import canvas
+import io
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
 
 
 # Create your views here.
@@ -94,6 +101,20 @@ def mi_vista(request):
     
     return render(request, 'index.html', {'form': form})
 
+def mi_vista(request):
+    ordenes = Orden.objects.all()  # Asume que tienes un modelo Orden
+    conteo_por_entregar = ordenes.filter(estado='por_entregar').count()
+    conteo_entregada = ordenes.filter(estado='entregada').count()
+    conteo_rechazada = ordenes.filter(estado='rechazada').count()
+
+    context = {
+        'ordenes': ordenes,
+        'conteo_por_entregar': conteo_por_entregar,
+        'conteo_entregada': conteo_entregada,
+        'conteo_rechazada': conteo_rechazada,
+    }
+    return render(request, 'mi_template.html', context)
+
 def enviar_motivo_rechazo(request):
     if request.method == 'POST':
         # Aquí procesas la solicitud
@@ -138,14 +159,27 @@ def rechazar_entrega(request, entrega_id):
         form = MotivoRechazoForm()
     return render(request, 'tu_template_rechazo.html', {'form': form})
 
+def anular_orden(request, id_orden):
+    orden = get_object_or_404(OrdenCompra, numero_compra=id_orden)
+    orden.estado = 'nula'  # Asegúrate de que 'nula' sea un estado válido en tu modelo
+    orden.save()
+    # Redirige al usuario de vuelta a la página de donde vino o a cualquier otra página
+    return redirect('index')
+
+
+
 
 def descargar_factura(request, id_orden_compra):
     # Obtener la orden de compra específica por ID
     orden_compra = get_object_or_404(OrdenCompra, id=id_orden_compra)
     
+    # Determinar si la orden está anulada
+    es_anulada = orden_compra.estado == 'nula'
+    
     # Preparar los datos para el PDF
     datos_para_pdf = {
         'id_orden_compra': id_orden_compra,
+        'es_anulada': es_anulada,  # Agregar el estado de anulación
         # Agregar más datos si es necesario
     }
     
