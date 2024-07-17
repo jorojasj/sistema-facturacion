@@ -54,6 +54,12 @@
       var select = document.getElementById("estado-select-" + numeroCompra);
       var valorSeleccionado = select.value;
       var tr = select.closest('tr'); // Encuentra el elemento <tr> ancestro más cercano
+
+      // Asegúrate de que esta condición refleje cómo se marca una factura como 'nula' en tu aplicación
+      if(tr.classList.contains("nula") || tr.getAttribute("data-estado") === "nula") {
+        alert("No se pueden cambiar estados de una factura nula.");
+        return; // Detiene la ejecución de la función aquí
+      }
     
       // Remueve todas las clases de color previas del <tr>
       tr.classList.remove("por_entregar", "entregada", "rechazada", "otro-color");
@@ -85,7 +91,7 @@
         });
       });
     });
-    </script>
+</script>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
