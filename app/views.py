@@ -7,7 +7,9 @@ from .forms import *
 from django.shortcuts import get_object_or_404
 from .forms import OrdenCompraForm
 from .models import OrdenCompra 
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 #IMPORTS DEL PDF
 from django.http import HttpResponse
@@ -89,32 +91,19 @@ def exportar_pdf(request, orden_id):
     buffer.seek(0)
     return response
 
-
 def mi_vista(request):
     if request.method == 'POST':
         form = MotivoRechazoForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('nombre_de_la_url_a_redirigir')
+            return redirect('index')  # Asegúrate de que esta línea esté correctamente indentada
     else:
         form = MotivoRechazoForm()
     
-    return render(request, 'index.html', {'form': form})
+    return render(request, 'tu_template_rechazo.html', {'form': form})
 
-def mi_vista(request):
-    ordenes = Orden.objects.all()  # Asume que tienes un modelo Orden
-    conteo_por_entregar = ordenes.filter(estado='por_entregar').count()
-    conteo_entregada = ordenes.filter(estado='entregada').count()
-    conteo_rechazada = ordenes.filter(estado='rechazada').count()
 
-    context = {
-        'ordenes': ordenes,
-        'conteo_por_entregar': conteo_por_entregar,
-        'conteo_entregada': conteo_entregada,
-        'conteo_rechazada': conteo_rechazada,
-    }
-    return render(request, 'mi_template.html', context)
-
+@csrf_exempt
 def enviar_motivo_rechazo(request):
     if request.method == 'POST':
         # Aquí procesas la solicitud
@@ -124,7 +113,6 @@ def enviar_motivo_rechazo(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
-
 
 
 
@@ -144,20 +132,6 @@ def rechazar_entrega(request, entrega_id):
         form = MotivoRechazoForm()
     return render(request, 'tu_template.html', {'form': form})
 
-
-def rechazar_entrega(request, entrega_id):
-    entrega = Entrega.objects.get(id=entrega_id)
-    if request.method == 'POST':
-        form = MotivoRechazoForm(request.POST)
-        if form.is_valid():
-            motivo_rechazo = form.save(commit=False)
-            motivo_rechazo.entrega = entrega
-            motivo_rechazo.save()
-            # Redirige o maneja la lógica después del rechazo
-            return redirect('alguna_vista')
-    else:
-        form = MotivoRechazoForm()
-    return render(request, 'tu_template_rechazo.html', {'form': form})
 
 def anular_orden(request, id_orden):
     orden = get_object_or_404(OrdenCompra, numero_compra=id_orden)

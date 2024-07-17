@@ -11,6 +11,7 @@ urlpatterns = [
     path('ordenCompra/', views.ordenCompra, name="ordenCompra"),
     path('ordenCompra/<int:id_orden_compra>/', views.ordenCompra, name='orden_compra'),
     path('editar_orden/<int:id_orden>/', views.editar_orden, name='editar_orden'),
-    path('ruta/a/enviar_motivo_rechazo/', views.enviar_motivo_rechazo, name='enviar_motivo_rechazo'),
+     path('enviar-motivo-rechazo/', views.enviar_motivo_rechazo, name='enviar_motivo_rechazo'),
     path('orden/anular/<int:id_orden>/', anular_orden, name='anular_orden'),
+    
 ]
