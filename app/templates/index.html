@@ -16,34 +16,33 @@
       </thead>
       <tbody>
           {% for o in ordenes %}
-          <tr class="{{ o.color_estado }}"> <!-- Corregido: Aplica la clase directamente aquí -->
+          <tr class="{{ o.color_estado }}">
             <th scope="row">{{o.numero_compra}}</th>
-            <td>{{o.nombre_cliente}}</td>
-            <td>{{o.fecha}}</td>
-            <td>{{o.precio_producto}}</td>
-            
-            <td>
-              {{o.get_estado_display}}
-              <select name="estado-{{o.numero_compra}}" id="estado-select-{{o.numero_compra}}" onchange="cambiarColorBoton('{{o.numero_compra}}')">
-                <option value="por_entregar">Por Entregar</option>
-                <option value="entregada">Entregada</option>
-                <option value="rechazada">Rechazada</option>
-              </select>
-              
-              <!-- Formulario para el motivo de rechazo -->
-              <form id="motivo-rechazo-form-{{o.numero_compra}}" style="display: none;">
-                  <input type="text" name="motivo-{{o.numero_compra}}" placeholder="Motivo del rechazo">
-                  <input type="hidden" name="orden_id" value="{{o.numero_compra}}">
-                  <button type="submit">Enviar</button>
-              </form>
-            </td>
-            <td>
-                <a class="btn btn-primary" href="{% url 'orden_compra' id_orden_compra=o.numero_compra%}">Descargar</a>
-                <a class="btn btn-secondary" href="{% url 'editar_orden' id_orden=o.numero_compra %}">Editar</a>
-                <a class="btn btn-danger" href="{% url 'anular_orden' id_orden=o.numero_compra %}">Anular</a>
-               </td>
-            </tr>
-          {% endfor %}
+<td>{{o.nombre_cliente}}</td>
+<td>{{o.fecha}}</td>
+<td>{{o.precio_producto}}</td>
+<td>
+  {{o.get_estado_display}}
+  <select name="estado-{{o.numero_compra}}" id="estado-select-{{o.numero_compra}}" onchange="cambiarColorBoton('{{o.numero_compra}}')">
+    <option value="por_entregar">Por Entregar</option>
+    <option value="entregada">Entregada</option>
+    <option value="rechazada">Rechazada</option>
+  </select>
+  <form id="motivo-rechazo-form-{{o.numero_compra}}" style="display: none;">
+      <input type="text" name="motivo-{{o.numero_compra}}" placeholder="Motivo del rechazo">
+      <input type="hidden" name="orden_id" value="{{o.numero_compra}}">
+      <button type="submit">Enviar</button>
+  </form>
+</td>
+<td>
+    <a class="btn btn-primary" href="{% url 'orden_compra' id_orden_compra=o.numero_compra %}">Descargar</a>
+    {% if o.estado != 'nula' %}  <!-- Cambiado de 'orden.estado' a 'o.estado' -->
+    <a class="btn btn-secondary" href="{% url 'editar_orden' id_orden=o.numero_compra %}">Editar</a>
+    {% endif %}
+    <a class="btn btn-danger" href="{% url 'anular_orden' id_orden=o.numero_compra %}">Anular</a>
+</td>
+</tr>
+{% endfor %}
       </tbody>
   </table>
 </div>

@@ -17,6 +17,7 @@ class OrdenCompra(models.Model):
         ('creada', 'Creada'),
         ('rectificada', 'Rectificada'),
         ('entregada', 'Entregada'),
+        ('nula', 'Nula'),
     )
     estado = models.CharField(max_length=11, choices=ESTADOS, default='creada')
 
